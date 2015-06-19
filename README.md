@@ -2,9 +2,12 @@ Tesseract-API
 =============
 This project provides a JNI wrapper for Tesseract OCR Library.
 
-Building
-========
+Building on Travis
+==================
+[![Build Status](https://travis-ci.org/apanimesh061/Tesseract-API.svg)](https://travis-ci.org/apanimesh061/Tesseract-API)
 
+Building Locally
+================
 Dependencies: `automake`, `gcc`
 
 ```shell
