@@ -17,12 +17,12 @@
 
 package com.apache.pdfbox.ocr.tesseract;
 
-import com.apache.pdfbox.ocr.tesseract.TessBaseAPI;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.junit.Ignore;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -34,7 +34,7 @@ public class TessBaseAPITest{
 	@Ignore
 	public void testTIF(){
 		TessBaseAPI api = new TessBaseAPI();
-		boolean init =api.init("eng");
+		boolean init = api.init("eng");
 		api.setImagePath("src/test/resources/samples/image4.TIF");
 		//api.getUTF8Text();
 		//api.end();
@@ -44,12 +44,32 @@ public class TessBaseAPITest{
 	}
 
 	@Test
-	public void testBufferedImage(){
+	public void textBadScan() {
 		try {
-			PDDocument document = PDDocument.load("src/test/resources/samples/pdf1.pdf");
+			PDDocument document = PDDocument.load(new File("src/test/resources/samples/scansmpl.pdf"));
 			PDFRenderer renderer = new PDFRenderer(document);
 			BufferedImage image = renderer.renderImage(0, 3);
-			
+
+			TessBaseAPI api = new TessBaseAPI();
+			boolean init = api.init("eng");
+			api.setBufferedImage(image);
+			String text = api.getUTF8Text();
+			System.out.println(text);
+			api.end();
+			assertEquals(true, true);
+			document.close();
+		}catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testBufferedImage() {
+		try {
+			PDDocument document = PDDocument.load(new File("src/test/resources/samples/pdf1.pdf"));
+			PDFRenderer renderer = new PDFRenderer(document);
+			BufferedImage image = renderer.renderImage(0, 3);
+
 			TessBaseAPI api = new TessBaseAPI();
 			boolean init = api.init("eng");
 			api.setBufferedImage(image);
@@ -62,18 +82,18 @@ public class TessBaseAPITest{
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
-	public void testByteStram(){
+	public void testByteStream(){
 		try {
-			PDDocument document = PDDocument.load("src/test/resources/samples/pdf2.pdf");
+			PDDocument document = PDDocument.load(new File("src/test/resources/samples/pdf2.pdf"));
 			PDFRenderer renderer = new PDFRenderer(document);
 			BufferedImage image = renderer.renderImage(0, 3);
 			int width = image.getWidth();
 			int height = image.getHeight();
 			int bpp = 3;
 			int bpl = width*3;
-			
+
 			TessBaseAPI api = new TessBaseAPI();
 			byte data[] = api.getByteStream(image);
 			boolean init = api.init("eng");
@@ -87,11 +107,11 @@ public class TessBaseAPITest{
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Test
 	public void testIterator() {
 		try {
-			PDDocument document = PDDocument.load("src/test/resources/samples/pdf3.pdf");
+			PDDocument document = PDDocument.load(new File("src/test/resources/samples/pdf3.pdf"));
 			PDFRenderer renderer = new PDFRenderer(document);
 			BufferedImage image = renderer.renderImage(0, 3);
 			TessBaseAPI api = new TessBaseAPI();
